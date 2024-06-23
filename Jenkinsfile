@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        BUILD_VERSION = '0.0.7'
-        DOCKER_IMAGE = 'mohyehia99/spring-boot-testing'
-    }
-
     stages {
         stage('Clean Workspace') {
             steps {
