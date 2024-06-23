@@ -14,7 +14,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -30,3 +30,4 @@ pipeline {
             }
         }
     }
+}
