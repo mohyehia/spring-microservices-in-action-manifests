@@ -14,20 +14,19 @@ pipeline {
                 }
             }
         }
-    }
+        
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/mohyehia/spring-microservices-in-action-manifests'
+            }
+        }
 
-    stage('Checkout') {
-        steps {
-            git branch: 'main',
-                url: 'https://github.com/mohyehia/spring-microservices-in-action-manifests'
+        stage('Update K8s Manifests') {
+            steps {
+                sh "cat spring-boot-testing/manifest.yml"
+                sh "sed -i 's|${DOCKER_IMAGE}.*|${DOCKER_IMAGE}:${BUILD_VERSION}|g' spring-boot-testing/manifest.yml"
+                sh "cat spring-boot-testing/manifest.yml"
+            }
         }
     }
-
-    stage('Update K8s Manifests') {
-        steps {
-            sh "cat spring-boot-testing/manifest.yml"
-            sh "sed -i 's|${DOCKER_IMAGE}.*|${DOCKER_IMAGE}:${BUILD_VERSION}|g' spring-boot-testing/manifest.yml"
-            sh "cat spring-boot-testing/manifest.yml"
-        }
-    }
-}
