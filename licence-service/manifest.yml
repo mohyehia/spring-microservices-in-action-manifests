@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: license-service
+  namespace: dev
+spec:
+  selector:
+    app: license-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8083
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: license-service-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: license-service
+  template:
+    metadata:
+      labels:
+        app: license-service
+        collect_logs_with_filebeat: "true"
+#      annotations:
+#        co.elastic.logs/enabled: "true"
+#        co.elastic.logs.json-logging/json.keys_under_root: "true"
+#        co.elastic.logs.json-logging/json.add_error_key: "true"
+#        co.elastic.logs.json-logging/json.message_key: "message"
+    spec:
+      containers:
+        - name: license-service-ctr
+          image: mohyehia99/licence-service:0.0.1
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          env:
+            - name: ORGANIZATION_MS_API
+              value: http://organization-service:80/api/v1/organizations/{organizationSlug}
+            - name: SERVER_SHUTDOWN
+              value: "graceful"
+          readinessProbe:
+            httpGet:
+              port: 8083
+              path: /actuator/health
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              port: 8083
+              path: /actuator/health
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - sleep 10
