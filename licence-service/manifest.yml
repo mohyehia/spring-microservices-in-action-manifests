@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: license-service-ctr
-          image: mohyehia99/licence-service:0.0.1
+          image: mohyehia99/licence-service:0.0.2
           ports:
             - containerPort: 8083
               protocol: TCP
