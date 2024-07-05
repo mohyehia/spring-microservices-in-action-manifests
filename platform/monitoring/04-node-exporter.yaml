@@ -63,7 +63,7 @@ metadata:
     prometheus.io/scrape: 'true'
     prometheus.io/port: '9100'
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: node-exporter
@@ -72,4 +72,3 @@ spec:
       protocol: TCP
       port: 9100
       targetPort: 9100
-      nodePort: 30003

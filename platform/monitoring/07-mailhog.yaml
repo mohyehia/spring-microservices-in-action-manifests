@@ -34,7 +34,7 @@ metadata:
 spec:
   selector:
     app: mailhog
-  type: NodePort
+  type: ClusterIP
   ports:
     - protocol: TCP
       name: mailhog-smtp-port
@@ -44,4 +44,3 @@ spec:
       name: mailhog-web-port
       port: 8025
       targetPort: 8025
-      nodePort: 30006

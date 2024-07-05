@@ -51,10 +51,9 @@ metadata:
 spec:
   selector:
     app: alert-manager
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 9093
       name: alert-manager
       targetPort: 9093
-      nodePort: 30005
       protocol: TCP
