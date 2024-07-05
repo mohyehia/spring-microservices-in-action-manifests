@@ -19,9 +19,9 @@ pipeline {
 
         stage('Update K8s Manifests') {
             steps {
-                sh "cat spring-boot-testing/manifest.yml"
-                sh "sed -i 's|${DOCKER_IMAGE}.*|${DOCKER_IMAGE}:${BUILD_VERSION}|g' spring-boot-testing/manifest.yml"
-                sh "cat spring-boot-testing/manifest.yml"
+                sh "cat ${APPLICATION}/manifest.yml"
+                sh "sed -i 's|${DOCKER_IMAGE}.*|${DOCKER_IMAGE}:${BUILD_VERSION}|g' ${APPLICATION}/manifest.yml"
+                sh "cat ${APPLICATION}/manifest.yml"
             }
         }
 
@@ -30,7 +30,7 @@ pipeline {
                 sh """
                     git config user.email "mohammedyehia99@gmail.com"
                     git config user.name "mohyehia"
-                    git add spring-boot-testing/manifest.yml
+                    git add ${APPLICATION}/manifest.yml
                     git commit -m "Update manifest.yml file"
                 """
                 withCredentials([usernamePassword(credentialsId: 'github-token', passwordVariable: 'gitPassword', usernameVariable: 'gitUsername')]) {
