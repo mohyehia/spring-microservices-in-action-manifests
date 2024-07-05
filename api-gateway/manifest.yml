@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: dev
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+      nodePort: 30005
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+        collect_logs_with_filebeat: "true"
+#        the below annotations in case of using the configuration file => temp.filebeats.yaml
+#      annotations:
+#        co.elastic.logs/enabled: "true"
+#        co.elastic.logs.json-logging/json.keys_under_root: "true"
+#        co.elastic.logs.json-logging/json.add_error_key: "true"
+#        co.elastic.logs.json-logging/json.message_key: "message"
+    spec:
+      containers:
+        - name: api-gateway-ctr
+          image: mohyehia99/api-gateway:0.0.1
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          env:
+            - name: SERVER_SHUTDOWN
+              value: "graceful"
+          readinessProbe:
+            httpGet:
+              port: 8082
+              path: /actuator/health
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              port: 8082
+              path: /actuator/health
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - sleep 10
