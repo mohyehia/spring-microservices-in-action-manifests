@@ -14,9 +14,8 @@ spec:
     - port: 16686
       targetPort: 16686
       protocol: TCP
-      nodePort: 30001
       name: ui
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: redis-ctr
-          image: redis:7.2.4
+          image: redis:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6379

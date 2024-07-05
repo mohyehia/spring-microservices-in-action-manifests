@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mongo-ctr
-          image: mongo:latest
+          image: mongo:4.4.29-focal
 ---
 apiVersion: v1
 kind: Service
