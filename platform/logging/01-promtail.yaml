@@ -65,9 +65,6 @@ data:
       - job_name: pod-logs
         kubernetes_sd_configs:
           - role: pod
-            filters:
-              - name: label
-                values: ["collect_logs=promtail"]
         relabel_configs:
           - source_labels:
               - __meta_kubernetes_pod_node_name
@@ -140,7 +137,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: promtail-serviceaccount
-
+  namespace: logging
 --- # Rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -150,7 +147,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: promtail-serviceaccount
-    namespace: default
+    namespace: logging
 roleRef:
   kind: ClusterRole
   name: promtail-clusterrole

@@ -10,6 +10,7 @@ spec:
     - protocol: TCP
       port: 3200
       targetPort: 3200
+      name: tempo
     - protocol: TCP
       port: 9411
       targetPort: 9411
@@ -36,17 +37,20 @@ spec:
         - name: tempo
           image: grafana/tempo:latest
           args:
-            - -config.file=/etc/tempo.yml
+            - '--config.file=/etc/tempo/tempo.yml'
           ports:
             - containerPort: 3200
               protocol: TCP
             - containerPort: 9411
               protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/tempo
+              name: tempo-config
       volumes:
         - name: tempo-config
           configMap:
-            defaultMode: 420
             name: tempo-cm
+            defaultMode: 420
 ---
 apiVersion: v1
 kind: ConfigMap

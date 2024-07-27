@@ -41,6 +41,8 @@ spec:
               value: "graceful"
             - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
               value: http://tempo.logging.svc:9411/api/v2/spans
+            - name: LICENSE_SERVICE_URI
+              value: http://licence-service
           readinessProbe:
             httpGet:
               port: 8082
