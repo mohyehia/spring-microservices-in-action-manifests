@@ -27,23 +27,20 @@ spec:
     metadata:
       labels:
         app: api-gateway
-        collect_logs_with_filebeat: "true"
-#        the below annotations in case of using the configuration file => temp.filebeats.yaml
-#      annotations:
-#        co.elastic.logs/enabled: "true"
-#        co.elastic.logs.json-logging/json.keys_under_root: "true"
-#        co.elastic.logs.json-logging/json.add_error_key: "true"
-#        co.elastic.logs.json-logging/json.message_key: "message"
+        collect_logs: "promtail"
+
     spec:
       containers:
         - name: api-gateway-ctr
-          image: mohyehia99/api-gateway:0.0.2
+          image: mohyehia99/api-gateway:0.0.3
           ports:
             - containerPort: 8082
               protocol: TCP
           env:
             - name: SERVER_SHUTDOWN
               value: "graceful"
+            - name: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
+              value: http://tempo.logging.svc:9411/api/v2/spans
           readinessProbe:
             httpGet:
               port: 8082

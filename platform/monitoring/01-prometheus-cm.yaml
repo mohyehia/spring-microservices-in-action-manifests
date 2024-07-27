@@ -157,12 +157,12 @@ data:
             labels:
               application: 'API Gateway'
 
-      - job_name: 'license-service'
+      - job_name: 'licence-service'
         metrics_path: /actuator/prometheus
         static_configs:
-          - targets: ['license-service.dev.svc.cluster.local:80']
+          - targets: ['licence-service.dev.svc.cluster.local:80']
             labels:
-              application: 'License Service'
+              application: 'Licence Service'
 
       - job_name: 'organization-service'
         metrics_path: /actuator/prometheus
